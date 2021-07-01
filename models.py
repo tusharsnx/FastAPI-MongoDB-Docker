@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 
@@ -7,36 +7,36 @@ from typing import Optional, List
 
 
 class UserRequestBody(BaseModel):
-    name: str
-    username: str
+    name: str  = Field(..., description="Name of the user")
+    username: str  = Field(..., description="Username of the user")
 
 
 # Response models
 
 # for user details
 class FileModel(BaseModel):
-    file_id: str
-    name: str
-    path: str
-    size: float
-    date_added: datetime
+    file_id: str = Field(..., description="File id of the file")
+    name: str = Field(..., description="File name of the file")
+    path: str = Field(..., description="Path of the directory where file is stored")
+    size: float = Field(..., description="File size")
+    date_added: datetime = Field(..., description="File creation date")
 
 # for file details
 class UserModel(BaseModel):
-    name: str
-    username: str
-    remaining_size: float
-    files: List[FileModel]
+    name: str  = Field(..., description="Name of the user")
+    username: str  = Field(..., description="Username of the user")
+    remaining_size: float  = Field(..., description="Remaining storage space for the user")
+    files: List[FileModel]  = Field(..., description="List of all files")
 
 # for operation status
 class OperationStatusModel(BaseModel):
-    id: str
-    detail: str
+    id: str  = Field(..., description="Id(file_id/ username) related to the operation")
+    detail: str  = Field(..., description="Operation status")
 
 # user update body
 class UserUpdateModel(BaseModel):
-    name: Optional[str] = None
-    username: Optional[str] = None
+    name: Optional[str] = Field(None, description="Name of the user")
+    username: Optional[str] = Field(None, description="Username of the user")
 
 
 

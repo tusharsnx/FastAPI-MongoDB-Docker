@@ -17,8 +17,6 @@ with open('config.yaml', 'r') as f:
 
 DOMAIN = os.environ["DOMAIN"]
 
-TEMP_PATH = "/temp"
-
 router = APIRouter(default_response_class=HTMLResponse, include_in_schema=False)
 template = Jinja2Templates(directory="templates")
 
@@ -108,7 +106,6 @@ async def delete(request: Request, file_id: str, user: UserRequestBody = Depends
 
 # background task for saving files
 async def upload_file(file: UploadFile, username: str):
-    # utils.file_save(path=TEMP_PATH+f"/{uuid4()}", file=file)
     async with aiohttp.ClientSession() as session:
         data = aiohttp.FormData(quote_fields=False)
         data.add_field('file', file.file.read(), filename=file.filename)

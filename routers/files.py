@@ -15,6 +15,10 @@ DIR = "uploaded"
 
 @router.post("/{username}", response_model=OperationStatusModel)
 async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = File(...), size: str = Form(...)):
+    '''Recieves file from the client and stores in the server
+        - username : username for the user
+        - file : file to upload
+    '''
 
     # checking if user exists
     user = await read_user(username)
