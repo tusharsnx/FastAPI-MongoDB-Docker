@@ -1,0 +1,7 @@
+
+---
+  SECRET: "mysecret"
+  CLIENT_ID: "722606380137-og8ok3tuotbrclko9fufih9ecdrb01a9.apps.googleusercontent.com"
+  CLIENT_SECRET: "C6nN5q32iylE7SFtH5ZFNp4g"
+  SCOPE: "openid email profile"
+  DOMAIN: "https://fastapi-cloud-storage.herokuapp.com"

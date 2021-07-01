@@ -1,0 +1,8 @@
+/venv/
+/env/
+__pycache__/
+/uploaded/*
+!/uploaded/dummy.txt
+/db.db
+/.github/
+/.gitignore

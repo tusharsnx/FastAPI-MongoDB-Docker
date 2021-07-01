@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body%}
+    <div id="index-banner" class="parallax-container">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <br><br>
+                <h1 class="header center dark-mode-text">You Need <span class="logo-gradient">YourDrive</span></h1>
+                <div class="row center">
+                    <h5 class="header col s12 light">Your Memories, Your Thoughts all at one place</h5>
+                    <h5 class="header light">Click on the button to get started</h5>
+                </div>
+                <div class="row center">
+                    <a href="{{ url_for('dashboard') }}"  class="btn  btn-grad black-text" style="font-weight: 600;">Let's Go</a>
+                </div>
+                <br><br>
+            </div>
+        </div>
+        <div class="parallax"><img src="{{ url_for('static', path='/images/parallax2.jpg') }}" alt=""></div>
+    </div>
+
+
+    <div class="container">
+        <div class="section">
+        <!--   Icon Section   -->
+        <div class="row">
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 id="icons" class="center"><i class="material-icons">flash_on</i></h2>
+                    <h5 class="center  dark-mode-text">Powered by FastAPI</h5>
+                    <p class="center">Very high performance, on par with NodeJS and Go. Increases the speed to develop features by about 200% to 300%. Designed to be easy to use and learn. Less time reading docs.</p>
+                </div>
+            </div>
+
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 id="icons" class="center"><i class="material-icons">group</i></h2>
+                    <h5 class="center dark-mode-text">Great OpenAPI Support</h5>
+                    <p class="center">Production-ready code with high scalibility. With automatic interactive documentation. Based on the open standards for APIs. The interactive API documentation has automatic updates.</p>
+                </div>
+            </div>
+
+
+            <div class="col s12 m4">
+                <div class="icon-block">
+                    <h2 id="icons" class="center"><i class="material-icons">settings</i></h2>
+                    <h5 class="center dark-mode-text">Pydantic Support</h5>
+                    <p class="center">Data validation and settings management using python type annotations. pydantic enforces type hints at runtime, and provides user friendly errors when data is invalid.</p>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    <div class="parallax-container valign-wrapper">
+        <div class="section no-pad-bot">
+            <div class="container">
+                <div class="row center">
+                    <h5 class="header col s12 light">Faster Downloads, Faster Uploads, Everything you need</h5>
+                </div>
+            </div>
+        </div>
+        <div class="parallax"><img height="650px" src="{{ url_for('static', path='/images/parallax1.jpg') }}" alt="Unsplashed background img 2"></div>
+    </div>
+{% endblock %}
+
+
+{% block extra_scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.parallax-container img').style.opacity=0.3
+        });
+    </script>
+{% endblock %}
+
+

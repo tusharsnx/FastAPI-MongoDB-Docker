@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body%}
+
+    <div class="row" style="margin-top: 50;">
+        
+        <!-- Upload dashboard -->
+        <div class="col m3 s12">
+            <div class="upload-dashboard">
+                <div class="upload-option">
+                    <ul class="collapsible" style=" border: 0px; box-shadow: 0 0 0 rgb(20 20 20);" >
+                    <li>
+                        <div class="collapsible-header" style="display:block; background-color: #202020; border: 0px;">
+                            <div class="row">
+                                <div class="col s6">
+                                    <div class="dark-mode-text left-align" style="font-size: large;">Add Files</div>
+                                </div>
+                                <div class="col s1 offset-s4">
+                                    <a href="#"><i class="material-icons small orange-text darken-2-text upload-option-trigger dropdown-trigger" data-target='upload-option'>add_circle_outline</i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="collapsible-body"  style="border: 0px; padding-top: 0px;">
+                            <form>
+                                <div class="file-field input-field">
+                                    <div class="btn btn-grad">
+                                        <span class="black-text">File</span>
+                                        <input type="file"  id="file-input">
+                                    </div>
+                                    <div class="file-path-wrapper">
+                                        <input class="file-path validate dark-mode-text" type="text">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="center">
+                                <a class="black-text btn btn-grad center"  id="upload-button">Upload File</a>
+                            </div>
+                        </div>
+                        <div class="progress" style="display: none;  margin-top: 20">
+                            <div class="determinate" style="width: 0%"></div>
+                        </div>
+
+                        <div class="response dark-mode-text center" style="font-size: larger; padding-bottom: 15px; display: none"></div>
+                    
+                    </li>
+                    </ul>
+                </div>
+            </div> 
+        </div>
+
+        <!-- file dashboard -->
+        <div class="col s12 m9 file-dashboard">
+            <div  class="file-dashboard-content" >
+                <div class="container">
+                    <div class="header dark-mode-text" style="margin-top:20; font-size: 80;">Files</div>
+                </div>
+
+                {%if user_files|length > 0 %}
+                <!-- file list -->
+                <div class="scroll">
+                    <div id="file-list" style="margin: 10 20;">
+                        {% set rows = (user_files|length)//3 %}
+                        {% for i in range(rows) %}
+                        <div class="row"  style="margin: 5px 10px;">
+                            {% for j in range(3) %}
+                                    <div class="col s12 m4">
+                                        <div class="card" style="padding: 10;">
+                                            <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
+                                            <div class="row" style="margin-bottom:0;">
+                                                <div class = "col s3" style="padding-top: 10;">
+                                                    <a href="download/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
+                                                </div>
+                                                <div class = "col s3" style="padding-top: 10;">
+                                                    <a href="delete/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
+                                                </div>
+                                                <div class = "col s4 offset-s2">
+                                                    <div id="dates" class="dark-mode-text" style="padding-top: 15px">{{user_files[(3*i)+j].date_added}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- for remaining files -->
+                        <div class="row" style="margin: 5px 10px;">
+                            {% for i in range(3*rows, user_files|length) %}
+                                <div class="col s12 m4">
+                                    <div class="card" style="padding: 10;">
+                                        <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
+                                        <div class="row"   style="margin-bottom:0;">
+                                            <div class = "col s3" style="padding-top: 10;">
+                                                <a href="download/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
+                                            </div>
+                                            <div class = "col s3" style="padding-top: 10;">
+                                                <a href="delete/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
+                                            </div>
+                                            <div class = "col s4 offset-s2">
+                                                <div  id="dates" class="dark-mode-text" style="padding-top: 10px">{{user_files[i].date_added}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="shade"></div>
+                </div>
+
+                {% else %}
+                    <div class="dark-mode-text center" style=" padding: 20px;font-size: 60px;">No Files Found</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_scripts %}
+
+<script>
+    $('document').ready(function () {
+
+        // triggers when file is selected
+        $('#upload-button').click(function() {
+            
+            console.log("hello i am here");
+            let file = $('#file-input')[0].files[0]
+
+            if($('#file-input')[0].files.length==0) {
+                alert('Error : No file selected');
+                return;
+            }
+            console.log(file.type)
+
+            // allowed file types
+            const allowed_mime_types = [
+                "application/msword", 
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+                'text/plain','text/docs','text/xls', 'text/ppt', "application/vnd.ms-excel", 
+                'image/jpg', 'image/jpeg', 'image/png', "video/mp4","application/pdf", 
+                "application/vnd.ms-powerpoint", "text/csv"
+            ];
+
+            // allowed file size
+            const allowed_size_mb = 2;
+        
+            if(allowed_mime_types.indexOf(file.type) == -1) {
+                alert('Error : Incorrect file type');
+                return;
+            }
+
+            if(file.size > allowed_size_mb*1024*1024) {
+                alert('Error : Exceeded size');
+                return;
+            }
+
+            // after all validations
+            let data = new FormData()
+            data.append('file', file, filename=file.name);
+            let request = new XMLHttpRequest();
+            request.open('POST', '/upload');
+
+            // upload progress event
+            request.upload.addEventListener('progress', function(e) {
+            let percent_complete = (e.loaded / e.total)*100;
+                
+                // percentage of upload completed
+                $('.determinate').css("width", percent_complete+"%");
+            });
+
+            // triggers when file is uploaded completely
+            request.addEventListener('load', function(e) {
+                request.response;
+                $('.progress').hide()
+                $(".upload-options .response").text("File Uploaded")
+                location.reload(false);
+                
+            });
+            //render progress bar
+            $('.progress').show();
+
+            // sends the data
+            request.send(data);
+            $(".response").show();
+            $(".response").text("File Uploaded Successfully");
+
+        });
+
+        // to initialize upload-option collapsible
+        $(document).ready(function(){
+        $('.collapsible').collapsible();
+  });
+        
+    });
+</script>
+
+{% endblock %}

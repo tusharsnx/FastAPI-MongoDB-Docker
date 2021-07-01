@@ -1,0 +1,2 @@
+# file to retain uploaded folder from being deleted.
+# don't delete this file

@@ -1,0 +1,149 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!--Import Google Icon Font-->
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+     <!--Import materialize.css-->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+     <!-- Import custom css -->
+     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+    <nav role="navigation">
+        <div class="nav-wrapper">
+            <a id="logo-container" href="{{ request.url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
+            <ul class="right hide-on-med-and-down">
+                <!-- <li><a href="#">Navbar Link</a></li> -->
+                <li>
+                    {% if user %}
+                        <!-- Dropdown Trigger -->
+                        <a id="nav-header" class='dropdown-trigger' href='#' data-target='dropdown1'>{{user["name"]}}</a>
+
+                        <!-- Dropdown Structure -->
+                        <ul id='dropdown1' class='dropdown-content drk-bg' >
+                            <li><a href="/auth/logout" class="center white-text">Logout</span></a></li>
+                        </ul>
+                    {% else %}
+                        <a id = "btn" class="btn white-text drk-bg" href="/auth/login" >
+                            <div class="left">
+                                <img width="20px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                            </div>
+                            Login with Google
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+
+            <ul id="nav-mobile" class="sidenav">
+                <li> 
+                    {% if user %}
+                        <ul class="collapsible">
+                            <li>
+                                <div id="nav-header" class="collapsible-header center" style="display:block;">{{user["name"]}}</div>
+                                <div class="container collapsible-body drk-bg" style="margin-top: 10px"><a href="/auth/logout" class="center white-text">Logout</span></a></div>
+                            </li>
+                        </ul>
+                        <a href="#" class="white-text"></a>
+                    {% else %}
+                        <a class="btn white-text" href="/auth/login" style="background-color: #404040;">
+                            <div class="left">
+                                <img width="30px" style="margin-top:7px; margin-right:8px" alt="Google sign-in" 
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                            </div>
+                            Login with Google
+                        </a>
+                    {% endif %}
+                </li>
+            </ul>
+            <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+    {% block body %}{% endblock %}
+
+    <!-- <img src="./images/linkedin.png" alt="" class="circle responsive-img"> -->
+    {% block footer %}
+    <footer>
+        <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text header">Project Detail</h5>
+                    <p class="white-text">It is an open source cloud project development. If you have feature idea that you can implement and improve this project then you are welcome. Any PR is greatly appreciated.</p>
+            </div>
+        
+            <div id="connect-section" class="col l6 s12 right-align">
+                <h5 class="white-text">Connect</h5>
+                    <ul>
+                        <li><a class="white-text" href="https://github.com/tusharvickey1999">Github</a></li>
+                        <li><a class="white-text container " href="https://www.linkedin.com/in/tushar-singh-a0862617a/">LinkedIn</a></li>
+                    </ul>
+            </div>
+        </div>
+        </div>
+        <div class="footer-copyright">
+        <div class="container">
+            <div class="right-align grey-text">
+                Made by <a class="white-text ">Tushar Singh</a>
+            </div>
+        </div>
+        </div>
+    </footer>
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{{ url_for('static', path='/js/init.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
+    
+    <script>
+
+        // init dropdown
+       $('.dropdown-trigger').dropdown();
+
+    //    init collapsible in side-nav
+       $(document).ready(function(){
+            $('.collapsible').collapsible();
+        });
+    </script>
+
+    <!-- base extra scripts -->
+    <script>
+
+        // fixing dropdown in nav
+        $('.dropdown-trigger').hover(function() {
+            var instance = $(document).find('#dropdown1')
+            instance.css("margin-top", "70px")
+            instance.css("top", "0px")
+            instance.css("border-radius", "10px")
+            $(this).open()
+            console.log( $(document).find('#dropdown1').css("margin-top"));
+            }
+        );
+
+        // fixing dropdown in nav
+        $('.dropdown-trigger').click(function() {
+            var instance = $(document).find('#dropdown1')
+            instance.css("margin-top", "70px")
+            instance.css("top", "0px")
+            instance.css("border-radius", "10px")
+            }
+        );
+
+        // fixing side-nav collapsible
+        $('.collapsible-header').click(function() {
+            var instance = $("ul .collapsible .collapsible-body")
+            instance.css("background-color", "#404040")
+            instance.css("height", "")
+            instance.css("border-radius", "10px")
+            console.log(instance.css("background-color"));
+            }
+        );
+
+
+    </script>
+
+    <!-- pages extra scripts -->
+    {% block extra_scripts %}{% endblock %}
+
+</body>
