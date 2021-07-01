@@ -2,7 +2,7 @@ from models import OperationStatusModel,  FileModel
 from fastapi import APIRouter
 from typing import List
 from fastapi import BackgroundTasks, File, UploadFile, HTTPException, Form
-from database.crud import read_file, delete_file, create_file, read_user
+from database.crud import read_file, delete_after_read_file, create_file, read_user
 import utils
 from fastapi.security import OAuth2PasswordBearer
 import urllib.parse
@@ -43,8 +43,13 @@ async def get_file(file_id: str, username: str):
 @router.delete("/{username}/{file_id}", response_model=OperationStatusModel)
 async def remove_file(file_id: str, tasks: BackgroundTasks, username: str):
 
-    response = await delete_file(file_id=file_id, username=username)
-    if not response:
-        raise HTTPException(404, detail="user's file not found")
-    tasks.add_task(utils.file_delete, path=response.path)
-    return {"detail": "operation successful"}
+    # read file content to get path
+    file = await read_file(file_id=file_id, username=username)
+    if file is None:
+        raise HTTPException(status_code=404, detail="user's file not found") 
+
+    # delete by passing file doc
+    await delete_after_read_file(file)
+    tasks.add_task(utils.file_delete, path=file["path"])
+    print(file["file_id"])
+    return {"id": file["file_id"], "detail": "operation successful"}

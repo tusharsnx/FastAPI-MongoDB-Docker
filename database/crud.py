@@ -25,21 +25,26 @@ async def create_user(name: str, username: str):
     if await read_user(username):
         return False
     else:
-        await users.insert_one({
+        result = await users.insert_one({
             "name": name,
             "username": username,
             "remaining_size": 5,
             "files": []
         })
-        return True
+        if result.inserted_id:
+            return True
+        else:
+            return False
 
 # deletes user
 async def delete_user(username: str):
     result = await users.delete_one({"username": username})
-    if result["deletedCount"]:
+    if result.deleted_count:
         return True
     else: 
         return False
+
+### file cruds
 
 # returns all user's files
 async def get_files(username: str):
@@ -48,15 +53,10 @@ async def get_files(username: str):
 
 async def update_user(username: str, data: dict):
     result = await users.update_one({"username": username}, {"$set": data})
-    if result["modifiedCount"]:
+    if result.modified_count:
         return True
     else: 
         return False
-
-        
-# loop = asyncio.get_event_loop()
-# result = loop.run_until_complete(read_users())
-# print(result)
 
 # create user's file
 async def create_file(file_name: str, username: str, size: float, dir: str):
@@ -68,17 +68,53 @@ async def create_file(file_name: str, username: str, size: float, dir: str):
         "size": size,
         "date_added": datetime.now()
     }
-    await users.update_one({"username": username}, {"$push": {"files": file}})
+    await users.update_one({"username": username}, {"$push": {"files": file}, "$inc": {"remaining_size": -file["size"]}})
     return file_id
 
 # returns user's file details
 async def read_file(file_id: str, username: str):
-    pass
-#     file = await users.find_one({"username": username, "files.file_id": file_id}, {"_id": 0, "files": 1})
-#     return file
 
+    # aggreate function to use powerful unwind operator
+    latent_cursor = users.aggregate([
+        {"$unwind": "$files"},
+        {"$match": {"username": username, "files.file_id": file_id}},
+        {"$project": {"_id": 0, "files":1}}
+    ])
+    try:
+        # cannot index after coroutine
+        files = await latent_cursor.next()
+        #  getting the file detail document
+        file = files["files"]
+        return file
+    except:
+        return None
 
 # deletes user's file
 async def delete_file(file_id: str, username: str):
-    pass
-#     await users.update_one({"$set": {"$pull": {"files": file}}})
+    latent_cursor = users.aggregate([
+        {"$unwind": "$files"},
+        {"$match": {"username": username, "files.file_id": file_id}},
+        {"$project": {"_id": 0, "files":1}},
+    ])
+    try:
+        files = await latent_cursor.next()
+        file = files["files"]
+        result = await users.update_one({"files": file}, {"$pull": {"files": file}, "$inc": {"remaining_size": file["size"]}})
+        if result.modified_count:
+            return True
+        else:
+            print(1)
+            return False
+    except:
+        print(1)
+        return False
+
+# delete when file doc is given
+# no need to do aggregate call saves one databse io
+async def delete_after_read_file(file: dict):
+    result = await users.update_one({"files": file}, {"$pull": {"files": file}, "$inc": {"remaining_size": file["size"]}})
+    print(result)
+    if result.modified_count:
+        return True
+    else:
+        return False
