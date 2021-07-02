@@ -38,8 +38,10 @@
                                 <a class="black-text btn btn-grad center"  id="upload-button">Upload File</a>
                             </div>
                         </div>
-                        <div class="progress" style="display: none;  margin-top: 20">
-                            <div class="determinate" style="width: 0%"></div>
+                        <div class="progress-container container" style="padding-bottom: 10px; display: none;">
+                            <div class="progress">
+                                <div class="determinate" style="width: 0%"></div>
+                            </div>
                         </div>
 
                         <div class="response dark-mode-text center" style="font-size: larger; padding-bottom: 15px; display: none"></div>
@@ -122,63 +124,60 @@
 
 {% block extra_scripts %}
 
-<script>
-    $('document').ready(function () {
+    <script>
+        $('document').ready(function () {
 
-        // triggers when file is selected
-        $('#upload-button').click(function() {
-            
-            let file = $('#file-input')[0].files[0]
-
-            if($('#file-input')[0].files.length==0) {
-                alert('Error : No file selected')
-                return
-            }
-
-            // after all validations
-            let data = new FormData()
-            data.append('file', file, filename=file.name)
-            let request = new XMLHttpRequest()
-            request.open('POST', '/upload')
-
-            // upload progress event
-            request.upload.addEventListener('progress', function(e) {
-            let percent_complete = (e.loaded / e.total)*100;
+            // triggers when file is selected
+            $('#upload-button').click(function() {
                 
-                // percentage of upload completed
-                $('.determinate').css("width", percent_complete+"%");
+                let file = $('#file-input')[0].files[0]
+
+                if($('#file-input')[0].files.length==0) {
+                    alert('Error : No file selected')
+                    return
+                }
+
+                // after all validations
+                let data = new FormData()
+                data.append('file', file, filename=file.name)
+                let request = new XMLHttpRequest()
+                request.open('POST', '/upload')
+
+                // upload progress event
+                request.upload.addEventListener('progress', function(e) {
+                let percent_complete = (e.loaded / e.total)*100;
+                    
+                    // percentage of upload completed
+                    $('.determinate').css("width", percent_complete+"%");
+                })
+
+                // triggers when file is uploaded completely
+                request.addEventListener('load', function(e) {
+                    $('.progress-container').hide()
+                    $(".response").show()
+                    if(request.status==413){
+                        $(".response").text("File Size Exceeded")
+                    }
+                    else if(request.status==404){
+                        $(".response").text("User Not Found")
+                    }
+                    else{
+                        $(".response").text("File successfully uploaded")
+                        location.reload(false)
+                    }
+                })
+
+                //render progress bar
+                $('.progress-container').show();
+
+                // sends the data
+                request.send(data);
             })
 
-            // triggers when file is uploaded completely
-            request.addEventListener('load', function(e) {
-                $('.progress').hide()
-                $(".response").show()
-                if(request.status==413){
-                    $(".response").text("File Size Exceeded")
-                }
-                if(request.status==404){
-                    $(".response").text("User Not Found")
-                }
-                else{
-                    $(".response").text("File successfully uploaded")
-                    location.reload(false)
-                }
-                
-                
-                
+            // to initialize upload-option collapsible
+            $(document).ready(function(){
+            $('.collapsible').collapsible();
             })
-            //render progress bar
-            $('.progress').show();
-
-            // sends the data
-            request.send(data);
         })
-        // to initialize upload-option collapsible
-        $(document).ready(function(){
-        $('.collapsible').collapsible();
-  })
-        
-    })
-</script>
-
+    </script>
 {% endblock %}

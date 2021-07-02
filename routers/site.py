@@ -97,7 +97,7 @@ async def upload(task: BackgroundTasks, user: UserRequestBody = Depends(get_curr
     if response==0:
         raise HTTPException(404, detail="User not found")
     if response==-1:
-         raise HTTPException(413, detail="File size exceeded")
+        raise HTTPException(413, detail="File size exceeded")
 
 
 @router.get("/delete/{file_id}", response_class=HTMLResponse)

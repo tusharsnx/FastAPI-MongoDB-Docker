@@ -84,9 +84,9 @@ async def read_file(file_id: str, username: str):
     ])
     try:
         # cannot index after coroutine
-        files = await latent_cursor.next()
+        doc = await latent_cursor.next()
         #  getting the file detail document
-        file = files["files"]
+        file = doc["files"]
         return file
     except:
         return None
@@ -99,8 +99,8 @@ async def delete_file(file_id: str, username: str):
         {"$project": {"_id": 0, "files":1}},
     ])
     try:
-        files = await latent_cursor.next()
-        file = files["files"]
+        doc = await latent_cursor.next()
+        file = doc["files"]
         result = await users.update_one({"files": file}, {"$pull": {"files": file}, "$inc": {"remaining_size": file["size"]}})
         if result.modified_count:
             return True
@@ -117,3 +117,25 @@ async def delete_after_read_file(file: dict):
         return True
     else:
         return False
+
+async def update_file(username: str, file_id: str, data: dict):
+    latent_cursor = users.aggregate([
+        {"$unwind": "$files"},
+        {"$match": {"username": username, "files.file_id": file_id}},
+        {"$project": {"_id": 0, "files": 1}}
+    ])
+    try:
+        doc = await latent_cursor.next()
+        file = doc["files"]
+
+        # pull the file subdoc
+        result = await users.update_one({"files": file}, {"$pull": {"files": file}})
+        if result.modified_count:
+            # modify the file doc
+            file.update(data)
+            await users.update_one({"username": username}, {"$push": {"files": file}})
+            return True
+    except:
+        return False
+    
+    

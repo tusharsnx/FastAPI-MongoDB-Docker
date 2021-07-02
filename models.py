@@ -38,6 +38,9 @@ class UserUpdateModel(BaseModel):
     name: Optional[str] = Field(None, description="Name of the user")
     username: Optional[str] = Field(None, description="Username of the user")
 
+class FileUpdateModel(BaseModel):
+    name: str = Field(None, description="File name of the file")
+
 
 
 
