@@ -65,5 +65,4 @@ async def remove_file(file_id: str, tasks: BackgroundTasks, username: str):
     # delete by passing file doc
     await delete_after_read_file(file)
     tasks.add_task(utils.file_delete, path=file["path"])
-    print(file["file_id"])
     return {"id": file["file_id"], "detail": "operation successful"}

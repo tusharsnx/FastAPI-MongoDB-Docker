@@ -128,42 +128,18 @@
         // triggers when file is selected
         $('#upload-button').click(function() {
             
-            console.log("hello i am here");
             let file = $('#file-input')[0].files[0]
 
             if($('#file-input')[0].files.length==0) {
-                alert('Error : No file selected');
-                return;
-            }
-            console.log(file.type)
-
-            // allowed file types
-            const allowed_mime_types = [
-                "application/msword", 
-                "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-                'text/plain','text/docs','text/xls', 'text/ppt', "application/vnd.ms-excel", 
-                'image/jpg', 'image/jpeg', 'image/png', "video/mp4","application/pdf", 
-                "application/vnd.ms-powerpoint", "text/csv"
-            ];
-
-            // allowed file size
-            const allowed_size_mb = 2;
-        
-            if(allowed_mime_types.indexOf(file.type) == -1) {
-                alert('Error : Incorrect file type');
-                return;
-            }
-
-            if(file.size > allowed_size_mb*1024*1024) {
-                alert('Error : Exceeded size');
-                return;
+                alert('Error : No file selected')
+                return
             }
 
             // after all validations
             let data = new FormData()
-            data.append('file', file, filename=file.name);
-            let request = new XMLHttpRequest();
-            request.open('POST', '/upload');
+            data.append('file', file, filename=file.name)
+            let request = new XMLHttpRequest()
+            request.open('POST', '/upload')
 
             // upload progress event
             request.upload.addEventListener('progress', function(e) {
@@ -171,32 +147,38 @@
                 
                 // percentage of upload completed
                 $('.determinate').css("width", percent_complete+"%");
-            });
+            })
 
             // triggers when file is uploaded completely
             request.addEventListener('load', function(e) {
-                request.response;
                 $('.progress').hide()
-                $(".upload-options .response").text("File Uploaded")
-                location.reload(false);
+                $(".response").show()
+                if(request.status==413){
+                    $(".response").text("File Size Exceeded")
+                }
+                if(request.status==404){
+                    $(".response").text("User Not Found")
+                }
+                else{
+                    $(".response").text("File successfully uploaded")
+                    location.reload(false)
+                }
                 
-            });
+                
+                
+            })
             //render progress bar
             $('.progress').show();
 
             // sends the data
             request.send(data);
-            $(".response").show();
-            $(".response").text("File Uploaded Successfully");
-
-        });
-
+        })
         // to initialize upload-option collapsible
         $(document).ready(function(){
         $('.collapsible').collapsible();
-  });
+  })
         
-    });
+    })
 </script>
 
 {% endblock %}

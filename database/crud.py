@@ -49,6 +49,8 @@ async def delete_user(username: str):
 # returns all user's files
 async def get_files(username: str):
     user = await users.find_one({"username": username}, {"_id": 0})
+    for file in user["files"]:
+        file["date_added"] = file["date_added"].date()
     return user["files"]
 
 async def update_user(username: str, data: dict):
@@ -103,17 +105,14 @@ async def delete_file(file_id: str, username: str):
         if result.modified_count:
             return True
         else:
-            print(1)
             return False
     except:
-        print(1)
         return False
 
 # delete when file doc is given
 # no need to do aggregate call saves one databse io
 async def delete_after_read_file(file: dict):
     result = await users.update_one({"files": file}, {"$pull": {"files": file}, "$inc": {"remaining_size": file["size"]}})
-    print(result)
     if result.modified_count:
         return True
     else:

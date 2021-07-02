@@ -119,25 +119,19 @@ async def callback(request: Request, response: Response, task: BackgroundTasks):
     # getting the code from query parameter
     code = request.query_params.get("code")
 
-    print("code taken")
-
     # exchanging code for token
     token_details = await auth.get_token_details(code)
     decoded_data = await auth.decode_token(token_details["id_token"])
 
-    print("decoded data")
-
     # creating new user in the database if not exist
     task.add_task(create_new_user, name=decoded_data["name"], username=decoded_data["email"])
-    
-    print("added task")
 
     # redirecting to main page
     response = RedirectResponse(url=f"{DOMAIN}/home")
 
-    print("redirected")
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
+
 
 # route for logging out which deletes the cookie from the browser
 @router.get("/logout")
@@ -158,9 +152,3 @@ async def create_new_user(name, username):
                 # user does not exists
                 data = {"username": username, "name": name}
                 await session.post(f"{DOMAIN}/api/users", json=data)
-
-
-
-
-    
-

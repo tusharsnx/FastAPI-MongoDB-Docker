@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import date
 from typing import Optional, List
 
 
@@ -19,7 +19,7 @@ class FileModel(BaseModel):
     name: str = Field(..., description="File name of the file")
     path: str = Field(..., description="Path of the directory where file is stored")
     size: float = Field(..., description="File size")
-    date_added: datetime = Field(..., description="File creation date")
+    date_added: date = Field(..., description="File creation date")
 
 # for file details
 class UserModel(BaseModel):
