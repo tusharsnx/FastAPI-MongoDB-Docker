@@ -1,8 +1,8 @@
-/venv/
-/env/
-/tests/
+venv/
+env/
+tests/
 __pycache__/
-/uploaded/*
-!/uploaded/dummy.txt
-# /config.json
-/db.db
+uploaded/*
+!uploaded/dummy.txt
+/config.yaml
+db.db

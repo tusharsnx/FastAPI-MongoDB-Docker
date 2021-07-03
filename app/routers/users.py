@@ -1,11 +1,10 @@
 from fastapi import APIRouter, Depends
 from starlette.background import BackgroundTasks
-from typing import List, Dict
+from typing import List
 from models import UserRequestBody, UserModel, FileModel, OperationStatusModel, UserUpdateModel
 from fastapi import HTTPException, Request
 from database.crud import delete_user, get_files, read_user, read_users, create_user, update_user
 import utils
-from fastapi.security import OAuth2PasswordBearer
 
 router = APIRouter(tags=["users"], prefix="/api/users")
 
@@ -55,6 +54,7 @@ async def remove_user(username: str, task: BackgroundTasks):
 
     raise HTTPException(404, detail="user not found")
 
+#update user detail(user's name)
 @router.put("/{username}")
 async def update_user_detail(username: str, update_data: UserUpdateModel):
     update_data = update_data.dict(exclude_unset=True)

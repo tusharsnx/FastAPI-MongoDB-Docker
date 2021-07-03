@@ -1,22 +1,20 @@
-# from main import DOMAIN
 from fastapi import APIRouter, Depends, BackgroundTasks, UploadFile, File, HTTPException
 from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse, JSONResponse
-from models import UserModel, UserRequestBody
+from models import UserRequestBody
 from .authorization import auth
-from typing import Union
 import utils
 import aiohttp
 import yaml
 import os
 
 # loading domain url
-with open('config.yaml', 'r') as f:
-    config = yaml.load(f)
-
 DOMAIN = os.environ["DOMAIN"]
-INNER_DOMAIN = DOMAIN
+if DOMAIN=="http://localhost:8000":
+    INNER_DOMAIN = DOMAIN
+else:
+    INNER_DOMAIN = "http://0.0.0.0:8000"
 
 router = APIRouter(default_response_class=HTMLResponse, include_in_schema=False)
 template = Jinja2Templates(directory="templates")

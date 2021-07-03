@@ -92,10 +92,11 @@
                                                           <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
                                                           <form class="file_form">
                                                             <div class="input-field drk-bg">
-                                                                <input id="name" type="text" class="validate dark-mode-text" value={{user_files[(3*i)+j].filename}}>
-                                                                <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[(3*i)+j].file_id}}>
-                                                                <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
+                                                                <input id="name" type="text" class="validate dark-mode-text" value="{{user_files[(3*i)+j].filename}}">
+                                                                <input id="file_id" type="text" class="validate" style="display: none;" value="{{user_files[(3*i)+j].file_id}}">
+                                                                <input id="username" type="text" class="validate" style="display: none;" value="{{user["username"]}}">
                                                                 <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
+                                                                <br>
                                                                 <div class="dark-mode-text btn drk-bg" id = "modal-submit" style="margin-top:10px;">Submit</div>
                                                               </div>
                                                           </form>
@@ -136,9 +137,9 @@
                                                         <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
                                                         <form class="file_form">
                                                         <div class="input-field drk-bg">
-                                                            <input id="name" type="text" class="validate dark-mode-text" value={{user_files[i].filename}}>
-                                                            <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[i].file_id}}>
-                                                            <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
+                                                            <input id="name" type="text" class="validate dark-mode-text" value="{{user_files[i].filename}}">
+                                                            <input id="file_id" type="text" class="validate" style="display: none;" value="{{user_files[i].file_id}}">
+                                                            <input id="username" type="text" class="validate" style="display: none;" value="{{user["username"]}}">
                                                             <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
                                                             <br>
                                                             <div class="btn-flat dark-mode-text" id = "modal-submit" style="margin-top:10px;">Submit</div>
@@ -178,7 +179,8 @@
 
             // triggers when file is selected
             $('#upload-button').click(function() {
-                
+
+                $(".response").hide()
                 let file = $('#file-input')[0].files[0]
 
                 if($('#file-input')[0].files.length==0) {
@@ -203,8 +205,10 @@
                 // triggers when file is uploaded completely
                 request.addEventListener('load', function() {
                     $('.progress-container').hide()
+                    $('.determinate').css("width", "0%");
                     $(".response").show()
                     if(request.status==413){
+
                         $(".response").text("File Size Exceeded")
                     }
                     else if(request.status==404){

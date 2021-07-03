@@ -1,10 +1,6 @@
 from datetime import datetime
 from uuid import uuid4
-from database.db import db, users
-import asyncio
-# from passlib.context import CryptContext
-
-# hasher = CryptContext(schemes=["bcrypt"])
+from database.db import users
 
 ### user cruds
 
@@ -75,7 +71,6 @@ async def create_file(file_name: str, username: str, size: float, dir: str):
 
 # returns user's file details
 async def read_file(file_id: str, username: str):
-
     # aggreate function to use powerful unwind operator
     latent_cursor = users.aggregate([
         {"$unwind": "$files"},
@@ -127,7 +122,6 @@ async def update_file(username: str, file_id: str, data: dict):
     try:
         doc = await latent_cursor.next()
         file = doc["files"]
-
         # pull the file subdoc
         result = await users.update_one({"files": file}, {"$pull": {"files": file}})
         if result.modified_count:

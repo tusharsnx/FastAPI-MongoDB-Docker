@@ -9,13 +9,9 @@ import yaml
 import os
 
 # loading config for authorization
-with open('config.yaml', 'r') as f:
-    config = yaml.load(f)
-
-SECRET = config["SECRET"]
-CLIENT_ID = config["CLIENT_ID"]
-CLIENT_SECRET = config["CLIENT_SECRET"]
-SCOPE = config["SCOPE"]
+CLIENT_ID = os.environ["CLIENT_ID"]
+CLIENT_SECRET = os.environ["CLIENT_SECRET"]
+SCOPE = "openid email profile"
 DOMAIN = os.environ["DOMAIN"]
 
 

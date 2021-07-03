@@ -1,19 +1,20 @@
 from models import OperationStatusModel,  FileModel, FileUpdateModel
 from fastapi import APIRouter
-from fastapi import BackgroundTasks, File, UploadFile, HTTPException, Form
+from fastapi import BackgroundTasks, File, UploadFile, HTTPException
 from database.crud import read_file, delete_after_read_file, create_file, read_user, update_file
 import utils
-from fastapi.security import OAuth2PasswordBearer
 import urllib.parse
 from tempfile import NamedTemporaryFile
 
 router = APIRouter(tags=["files"], prefix="/api/files")
-auth = OAuth2PasswordBearer(tokenUrl="token")
 
 # dir for saving user files
 DIR = "uploaded"
+
+# file limit in mb
 LIMIT = 5
 
+# creates new file
 @router.post("/{username}", response_model=OperationStatusModel)
 async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = File(...)):
     '''Recieves file from the client and stores in the server
@@ -44,7 +45,7 @@ async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = Fil
     task.add_task(utils.file_save, file=temp_file,  path=f"{DIR}/{file_id}")
     return {"id": decoded_file_name, "detail": "operation successful"}
 
-
+# return file detail
 @router.get("/{username}/{file_id}", response_model=FileModel)
 async def get_file(file_id: str, username: str):
     file = await read_file(file_id=file_id, username=username)
@@ -53,6 +54,8 @@ async def get_file(file_id: str, username: str):
     else:
         return file
 
+
+# deletes a file
 @router.delete("/{username}/{file_id}", response_model=OperationStatusModel)
 async def remove_file(file_id: str, username: str,  tasks: BackgroundTasks):
 
@@ -66,6 +69,8 @@ async def remove_file(file_id: str, username: str,  tasks: BackgroundTasks):
     tasks.add_task(utils.file_delete, path=file["path"])
     return {"id": file["file_id"], "detail": "operation successful"}
 
+
+# update file detail(filename)
 @router.put("/{username}/{file_id}", response_model=OperationStatusModel)
 async def update_file_detail(username: str, file_id: str, update_data: FileUpdateModel):
     update_data = update_data.dict(exclude_unset=True)
