@@ -9,4 +9,4 @@ RUN pip install -r ./home/app/requirements.txt
 
 WORKDIR /home/app
 
-ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--workers", "100"]
+ENTRYPOINT ["uvicorn", "main:app", "--host", "0.0.0.0", "--workers", "100"  ]
