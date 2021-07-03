@@ -77,13 +77,13 @@ async def dashboard(request: Request, user: UserRequestBody = Depends(get_curren
     if user is None:
         return RedirectResponse(url=f"{DOMAIN}/auth/login")
 
-    response = []
     async with aiohttp.ClientSession() as session:
-        async with session.get(f"{INNER_DOMAIN}/api/users/{user.username}/files") as resp:
-            user_files = await resp.json()
-    if user_files:
-        response = [{"file_name": file["name"], "date_added": file["date_added"], "file_id": file["file_id"], "size": file["size"]} for file in user_files]
-    return template.TemplateResponse("dashboard.html",{"request": request, "user": user.dict(), "user_files": response})
+        async with session.get(f"{INNER_DOMAIN}/api/users/{user.username}") as resp:
+            user_info = await resp.json()
+    if user_info:
+        files = [{"filename": file["name"], "date_added": file["date_added"], "file_id": file["file_id"], "size": file["size"]} for file in user_info["files"]]
+        user_dict = {"name": user_info["name"], "username": user_info["username"], "remaining_size": round(user_info["remaining_size"], 2)}
+    return template.TemplateResponse("dashboard.html",{"request": request, "user": user_dict, "user_files": files})
 
 # route for uploading files
 @router.post("/upload", response_class=JSONResponse)

@@ -9,8 +9,8 @@ from typing import Optional, List
 class UserRequestBody(BaseModel):
     name: str  = Field(..., description="Name of the user")
     username: str  = Field(..., description="Username of the user")
-
-
+    
+    
 # Response models
 
 # for user details

@@ -56,7 +56,14 @@
         <div class="col s12 m9 file-dashboard">
             <div  class="file-dashboard-content" >
                 <div class="container">
-                    <div class="header dark-mode-text" style="margin-top:20; font-size: 80;">Files</div>
+                    <div class="row">
+                        <div class="col s6">
+                            <div class="header dark-mode-text" style="margin-top:20; font-size: 80;">Files</div>
+                        </div>
+                        <div class="col m3 offset-m3 offset-s1 s3 offset-s1">
+                            <div class="header dark-mode-text" style="margin-top:57;"><h3 style="display: inline">{{user.remaining_size}}/5 </h3><h5 style="display: inline"> MB</h5></div>
+                        </div>
+                    </div>
                 </div>
 
                 {%if user_files|length > 0 %}
@@ -69,7 +76,7 @@
                             {% for j in range(3) %}
                                     <div id={{user_files[(3*i)+j].file_id}} class="col s12 m4">
                                         <div class="card" style="padding: 10;">
-                                            <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
+                                            <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].filename}}</span>
                                             <div class="row" style="margin-bottom:0;">
                                                 <div class = "col s2" style="padding-top: 11;">
                                                     <a href="download/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
@@ -85,7 +92,7 @@
                                                           <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
                                                           <form class="file_form">
                                                             <div class="input-field drk-bg">
-                                                                <input id="name" type="text" class="validate dark-mode-text" value={{user_files[(3*i)+j].file_name}}>
+                                                                <input id="name" type="text" class="validate dark-mode-text" value={{user_files[(3*i)+j].filename}}>
                                                                 <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[(3*i)+j].file_id}}>
                                                                 <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
                                                                 <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
@@ -110,7 +117,7 @@
                             {% for i in range(3*rows, user_files|length) %}
                                 <div id={{user_files[i].file_id}} class="col s12 m4">
                                     <div class="card" style="padding: 10;">
-                                        <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
+                                        <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].filename}}</span>
                                         <div class="row"   style="margin-bottom:0;">
 
                                             <div class = "col s2" style="padding-top: 10;">
@@ -129,7 +136,7 @@
                                                         <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
                                                         <form class="file_form">
                                                         <div class="input-field drk-bg">
-                                                            <input id="name" type="text" class="validate dark-mode-text" value={{user_files[i].file_name}}>
+                                                            <input id="name" type="text" class="validate dark-mode-text" value={{user_files[i].filename}}>
                                                             <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[i].file_id}}>
                                                             <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
                                                             <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
