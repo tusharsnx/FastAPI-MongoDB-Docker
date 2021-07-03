@@ -67,17 +67,35 @@
                         {% for i in range(rows) %}
                         <div class="row"  style="margin: 5px 10px;">
                             {% for j in range(3) %}
-                                    <div class="col s12 m4">
+                                    <div id={{user_files[(3*i)+j].file_id}} class="col s12 m4">
                                         <div class="card" style="padding: 10;">
-                                            <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
+                                            <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[(3*i)+j].file_name}}</span>
                                             <div class="row" style="margin-bottom:0;">
-                                                <div class = "col s3" style="padding-top: 10;">
+                                                <div class = "col s2" style="padding-top: 11;">
                                                     <a href="download/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
                                                 </div>
-                                                <div class = "col s3" style="padding-top: 10;">
+                                                <div class = "col s2" style="padding-top: 10;">
                                                     <a href="delete/{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
                                                 </div>
-                                                <div class = "col s4 offset-s2">
+                                                <div class = "col s2" style="padding-top: 10;">
+                                                    <a class="modal-trigger" href="#modal-{{user_files[(3*i)+j].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">edit</i></a>
+                                                    <!-- modal structure -->
+                                                    <div id="modal-{{user_files[(3*i)+j].file_id}}" class="modal">
+                                                        <div class="modal-content drk-bg">
+                                                          <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
+                                                          <form class="file_form">
+                                                            <div class="input-field drk-bg">
+                                                                <input id="name" type="text" class="validate dark-mode-text" value={{user_files[(3*i)+j].file_name}}>
+                                                                <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[(3*i)+j].file_id}}>
+                                                                <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
+                                                                <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
+                                                                <div class="dark-mode-text btn drk-bg" id = "modal-submit" style="margin-top:10px;">Submit</div>
+                                                              </div>
+                                                          </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class = "col s6 m5 offset-m1">
                                                     <div id="dates" class="dark-mode-text" style="padding-top: 15px">{{user_files[(3*i)+j].date_added}}</div>
                                                 </div>
                                             </div>
@@ -90,19 +108,43 @@
                         <!-- for remaining files -->
                         <div class="row" style="margin: 5px 10px;">
                             {% for i in range(3*rows, user_files|length) %}
-                                <div class="col s12 m4">
+                                <div id={{user_files[i].file_id}} class="col s12 m4">
                                     <div class="card" style="padding: 10;">
-                                        <span class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
+                                        <span id="filename" class="dark-mode-text wrap-text" style="font-size: 15px;">{{user_files[i].file_name}}</span>
                                         <div class="row"   style="margin-bottom:0;">
-                                            <div class = "col s3" style="padding-top: 10;">
+
+                                            <div class = "col s2" style="padding-top: 10;">
                                                 <a href="download/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">file_download</i></a>
                                             </div>
-                                            <div class = "col s3" style="padding-top: 10;">
+
+                                            <div class = "col s2" style="padding-top: 10;">
                                                 <a href="delete/{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">delete</i></a>
                                             </div>
-                                            <div class = "col s4 offset-s2">
-                                                <div  id="dates" class="dark-mode-text" style="padding-top: 10px">{{user_files[i].date_added}}</div>
+
+                                            <div class = "col s2" style="padding-top: 10;">
+                                                <a class="modal-trigger" href="#modal-{{user_files[i].file_id}}"><i class="small left-align orange-text darken-2-text material-icons">edit</i></a>
+                                                    <!-- modal structure -->
+                                                <div id="modal-{{user_files[i].file_id}}"class="modal">
+                                                    <div class="modal-content drk-bg">
+                                                        <h5 class="dark-mode-text" style="margin-bottom: 5px">Edit Your File Name</h5>
+                                                        <form class="file_form">
+                                                        <div class="input-field drk-bg">
+                                                            <input id="name" type="text" class="validate dark-mode-text" value={{user_files[i].file_name}}>
+                                                            <input id="file_id" type="text" class="validate" style="display: none;" value={{user_files[i].file_id}}>
+                                                            <input id="username" type="text" class="validate" style="display: none;" value={{user["username"]}}>
+                                                            <h7 class="dark-mode-text" style="margin-bottom: 5px"><span class="red-text">*</span> new filename includes file extension</h7>
+                                                            <br>
+                                                            <div class="btn-flat dark-mode-text" id = "modal-submit" style="margin-top:10px;">Submit</div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                             </div>
+
+                                            <div class = "col s6 m5 offset-m1">
+                                                <div id="dates" class="dark-mode-text" style="padding-top: 15px">{{user_files[i].date_added}}</div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -152,7 +194,7 @@
                 })
 
                 // triggers when file is uploaded completely
-                request.addEventListener('load', function(e) {
+                request.addEventListener('load', function() {
                     $('.progress-container').hide()
                     $(".response").show()
                     if(request.status==413){
@@ -175,8 +217,45 @@
             })
 
             // to initialize upload-option collapsible
-            $(document).ready(function(){
             $('.collapsible').collapsible();
+            
+            // to initialize edit modal
+            $('.modal').modal();
+            $(".modal").css("background-color", "#404040")
+
+            // rename file
+            $(".modal #modal-submit").click(function() {
+                let parent = $(this).parent()
+                let rename = parent.find("#name").val()
+                let file_id = parent.find("#file_id").val()
+                let username = parent.find("#username").val()
+                var value = {name: rename};
+                var options = {
+                        url: "/api/files/"+username+"/"+file_id,
+                        method :"PUT",
+                        json : value,
+                    };
+                    fetch("/api/files/"+username+"/"+file_id, {
+      
+                        // Adding method type
+                        method: "PUT",
+                            
+                        // Adding body or contents to send
+                        body: JSON.stringify({name: rename}),
+                            
+                        // Adding headers to the request
+                        headers: {"Content-type": "application/json; charset=UTF-8"}
+                    })
+                        
+                    // Converting to JSON
+                    .then(response => response.json())
+                        
+                    // Displaying results to console
+                    .then(json => {
+                        $("#"+file_id+" #filename").text(rename)
+                        $('.modal').modal('close');
+                    });
+                
             })
         })
     </script>

@@ -38,24 +38,24 @@
 
 .btn-grad {
     background-image: linear-gradient(to right, #ff5252 0%, #ff9800 100%);
-   text-align: center;
-   transition: 0.5s;
-   background-size: auto;
-   color: white;
+    text-align: center;
+    transition: 0.5s;
+    background-size: auto;
+    color: white;
  }
 
  .btn-grad:hover {
-   background-position: right center; /* change the direction of the change here */
-   box-shadow: 0 0 20px #eee;
-   text-decoration: none;
- }
+    background-position: right center; /* change the direction of the change here */
+    box-shadow: 0 0 20px #eee;
+    text-decoration: none;
+}
 
  .nav-wrapper{
     padding: 0 50; 
 }
 
 nav ul a{
-  color: white;
+    color: white;
 }
 
 nav, .sidenav{
@@ -67,7 +67,7 @@ nav, .sidenav{
 }
 
 .drk-bg{
-    background-color: #404040;
+    background-color: #202020;
 }
 
 .dropdown-content{
