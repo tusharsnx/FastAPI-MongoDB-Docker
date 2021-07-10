@@ -1,6 +1,11 @@
 from motor import motor_asyncio
+import os
+import urllib.parse
 
-client = motor_asyncio.AsyncIOMotorClient("mongodb://admin:123@localhost:27017/")
+username = os.environ["USERNAME"]
+password = os.environ["PASS"]
+password = urllib.parse.quote(password)
+client = motor_asyncio.AsyncIOMotorClient(f"mongodb+srv://{username}:{password}@cluster0.i7jqe.mongodb.net")
 
 db = client["cloud-storage"]
 users = db["users"]

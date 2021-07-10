@@ -241,31 +241,26 @@
                 let file_id = parent.find("#file_id").val()
                 let username = parent.find("#username").val()
                 var value = {name: rename};
-                var options = {
-                        url: "/api/files/"+username+"/"+file_id,
-                        method :"PUT",
-                        json : value,
-                    };
-                    fetch("/api/files/"+username+"/"+file_id, {
-      
-                        // Adding method type
-                        method: "PUT",
-                            
-                        // Adding body or contents to send
-                        body: JSON.stringify({name: rename}),
-                            
-                        // Adding headers to the request
-                        headers: {"Content-type": "application/json; charset=UTF-8"}
-                    })
+                fetch("/api/files/"+username+"/"+file_id, {
+    
+                    // Adding method type
+                    method: "PUT",
                         
-                    // Converting to JSON
-                    .then(response => response.json())
+                    // Adding body or contents to send
+                    body: JSON.stringify({name: rename}),
                         
-                    // Displaying results to console
-                    .then(json => {
-                        $("#"+file_id+" #filename").text(rename)
-                        $('.modal').modal('close');
-                    });
+                    // Adding headers to the request
+                    headers: {"Content-type": "application/json; charset=UTF-8"}
+                })
+                        
+                // Converting to JSON
+                .then(response => response.json())
+                    
+                // Displaying results to console
+                .then(json => {
+                    $("#"+file_id+" #filename").text(rename)
+                    $('.modal').modal('close');
+                });
                 
             })
         })
