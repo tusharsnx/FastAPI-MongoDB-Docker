@@ -2,7 +2,7 @@ venv/
 env/
 tests/
 __pycache__/
-uploaded/*
+uploaded/
 !uploaded/dummy.txt
 /config.yaml
 db.db
