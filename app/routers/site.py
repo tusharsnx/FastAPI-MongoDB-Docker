@@ -14,7 +14,8 @@ DOMAIN = os.environ["DOMAIN"]
 if DOMAIN=="http://localhost:8000":
     INNER_DOMAIN = DOMAIN
 else:
-    INNER_DOMAIN = "http://0.0.0.0:8000"
+    PORT = os.environ["$PORT"]
+    INNER_DOMAIN = f"http://0.0.0.0:{PORT}"
 
 router = APIRouter(default_response_class=HTMLResponse, include_in_schema=False)
 template = Jinja2Templates(directory="templates")
