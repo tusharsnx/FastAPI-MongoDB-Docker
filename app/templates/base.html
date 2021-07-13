@@ -7,14 +7,14 @@
      <!--Import materialize.css-->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
      <!-- Import custom css -->
-     <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+     <link rel="stylesheet" href="/static/style.css">
     <title>{% block title %}{% endblock %}</title>
 </head>
 
 <body>
     <nav role="navigation">
         <div class="nav-wrapper">
-            <a id="logo-container" href="{{ request.url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
+            <a id="logo-container" href="{{ url_for('home') }}" class="brand-logo logo-gradient">YourDrive</a>
             <ul class="right hide-on-med-and-down">
                 <!-- <li><a href="#">Navbar Link</a></li> -->
                 <li>
@@ -93,7 +93,7 @@
     </footer>
     {% endblock %}
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="{{ url_for('static', path='/js/init.js') }}"></script>
+    <script src="/static/js/init.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
     
     <script>
