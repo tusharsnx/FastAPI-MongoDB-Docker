@@ -17,6 +17,9 @@ else:
     PORT = os.environ["PORT"]
     INNER_DOMAIN = f"http://0.0.0.0:{PORT}"
 
+# max file size(bytes) allowed to upload in a single request
+MAX_FILE_SIZE=5*1024*1024
+
 router = APIRouter(default_response_class=HTMLResponse, include_in_schema=False)
 template = Jinja2Templates(directory="templates")
 
@@ -82,7 +85,7 @@ async def dashboard(request: Request, user: UserRequestBody = Depends(get_curren
     if user_info:
         files = [{"filename": file["name"], "date_added": file["date_added"], "file_id": file["file_id"], "size": file["size"]} for file in user_info["files"]]
         user_dict = {"name": user_info["name"], "username": user_info["username"], "remaining_size": round(user_info["remaining_size"], 2)}
-    return template.TemplateResponse("dashboard.html",{"request": request, "user": user_dict, "user_files": files})
+    return template.TemplateResponse("dashboard.html",{"request": request, "user": user_dict, "user_files": files, "allowed_size": MAX_FILE_SIZE})
 
 # route for uploading files
 @router.post("/upload", response_class=JSONResponse)

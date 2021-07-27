@@ -187,6 +187,12 @@
                     alert('Error : No file selected')
                     return
                 }
+                
+                // allowed_size defined in jinja2 variable
+                if(file.size > {{allowed_size}}) {
+                alert('Error : Exceeded size');
+                return;
+                }
 
                 // after all validations
                 let data = new FormData()
