@@ -4,7 +4,7 @@ from fastapi import BackgroundTasks, File, UploadFile, HTTPException
 from database.crud import read_file, delete_after_read_file, create_file, read_user, update_file
 import utils
 import urllib.parse
-from tempfile import NamedTemporaryFile
+from tempfile import SpooledTemporaryFile
 
 router = APIRouter(tags=["files"], prefix="/api/files")
 
@@ -27,7 +27,7 @@ async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = Fil
         raise HTTPException(status_code=404, detail="user not found")
 
     # checking if file size is less than limit
-    temp_file = NamedTemporaryFile(delete=False)
+    temp_file = SpooledTemporaryFile(max_size=1024*1024)
     file_size: float = 0
     for chunk in file.file:
         file_size += len(chunk)/(1024*1024)
@@ -35,7 +35,8 @@ async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = Fil
             raise HTTPException(413, detail="file size exceeded")
         temp_file.write(chunk)
 
-    # sometimes filename recieved are enconded in url-like format
+
+    # sometimes filename recieved are enconded with url-like format
     decoded_file_name = urllib.parse.unquote(file.filename)
 
     # 'file' attributes are filename, file(file-like object)
@@ -43,6 +44,7 @@ async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = Fil
        
     # creating background task to save received file
     task.add_task(utils.file_save, file=temp_file,  path=f"{DIR}/{file_id}")
+    
     return {"id": decoded_file_name, "detail": "operation successful"}
 
 # return file detail
