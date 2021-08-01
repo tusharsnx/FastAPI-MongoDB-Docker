@@ -51,21 +51,17 @@ async def index(request: Request, user: UserRequestBody = Depends(get_current_us
 async def file_download(file_id: str, request: Request, user: UserRequestBody = Depends(get_current_user)):
     if user is None:
         return RedirectResponse(url=f"{DOMAIN}/auth/login")
-
     # fetches file details from the database using api call
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{INNER_DOMAIN}/api/files/{user.username}/{file_id}") as resp:
             file = await resp.json()
-
             # file details not available
             if resp.status!=200:
                 return template.TemplateResponse("file_not_found.html", {"request": request})
-
         # if details exist but file does not exists in the directory
         if not utils.file_exists(file["path"]):
             await session.delete(f"{INNER_DOMAIN}/api/files/{user.username}/{file_id}")
             return template.TemplateResponse("file_not_found.html", {"request": request})
-
     # return file, if exists
     return FileResponse(file["path"], filename=file["name"])
     
@@ -78,7 +74,7 @@ async def dashboard(request: Request, user: UserRequestBody = Depends(get_curren
     '''
     if user is None:
         return RedirectResponse(url=f"{DOMAIN}/auth/login")
-
+        
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{INNER_DOMAIN}/api/users/{user.username}") as resp:
             user_info = await resp.json()

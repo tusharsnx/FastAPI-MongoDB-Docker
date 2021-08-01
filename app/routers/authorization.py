@@ -5,7 +5,6 @@ from jose import jwt
 from uuid import uuid4
 import aiohttp
 import asyncio
-import yaml
 import os
 
 # loading config for authorization
@@ -104,46 +103,39 @@ router = APIRouter(prefix="/auth", tags=["authorization"], include_in_schema=Fal
 
 # redirects to auth server if not logged in
 @router.get("/login", response_class=HTMLResponse)
-async def login(response: Response):
+async def login():
     return RedirectResponse(url=auth.auth_server_url())      
 
 
 # callback url which receives code and create new user in the website
 @router.get("/callback")
 async def callback(request: Request, response: Response, task: BackgroundTasks):
-    
     # getting the code from query parameter
     code = request.query_params.get("code")
-
     # exchanging code for token
     token_details = await auth.get_token_details(code)
     decoded_data = await auth.decode_token(token_details["id_token"])
-
     # creating new user in the database if not exist
     task.add_task(create_new_user, name=decoded_data["name"], username=decoded_data["email"])
-
     # redirecting to main page
     response = RedirectResponse(url=f"{DOMAIN}/home")
-
     response.set_cookie(key="token", value=token_details["id_token"], httponly=True)
     return response
 
 
 # route for logging out which deletes the cookie from the browser
 @router.get("/logout")
-async def logout(response: Response):
+async def logout():
     response = RedirectResponse(url=f"{DOMAIN}/home")
     response.delete_cookie("token")
     return response
 
 # background task for creating new user if not exist already
 async def create_new_user(name, username):
-
     # checking if user exists
     async with aiohttp.ClientSession() as session:
         async with session.get(f"{DOMAIN}/api/users/{username}") as resp:
             data = await resp.json()
-
             if resp.status!=200:
                 # user does not exists
                 data = {"username": username, "name": name}

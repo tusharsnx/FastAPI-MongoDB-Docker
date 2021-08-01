@@ -34,14 +34,11 @@ async def add_file(username: str,  task: BackgroundTasks, file: UploadFile = Fil
         if file_size>LIMIT or file_size>user["remaining_size"]:
             raise HTTPException(413, detail="file size exceeded")
         temp_file.write(chunk)
-
-
+    
     # sometimes filename recieved are enconded with url-like format
     decoded_file_name = urllib.parse.unquote(file.filename)
-
     # 'file' attributes are filename, file(file-like object)
-    file_id = await create_file(file_name=decoded_file_name, username=username, size=float(file_size), dir="uploaded")
-       
+    file_id = await create_file(file_name=decoded_file_name, username=username, size=float(file_size), dir="uploaded")      
     # creating background task to save received file
     task.add_task(utils.file_save, file=temp_file,  path=f"{DIR}/{file_id}")
     
@@ -60,7 +57,6 @@ async def get_file(file_id: str, username: str):
 # deletes a file
 @router.delete("/{username}/{file_id}", response_model=OperationStatusModel)
 async def remove_file(file_id: str, username: str,  tasks: BackgroundTasks):
-
     # read file content to get path
     file = await read_file(file_id=file_id, username=username)
     if file is None:

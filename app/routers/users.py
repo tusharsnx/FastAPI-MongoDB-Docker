@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from starlette.background import BackgroundTasks
 from typing import List
 from models import UserRequestBody, UserModel, FileModel, OperationStatusModel, UserUpdateModel
-from fastapi import HTTPException, Request
+from fastapi import HTTPException
 from database.crud import delete_user, get_files, read_user, read_users, create_user, update_user
 import utils
 
@@ -10,8 +10,8 @@ router = APIRouter(tags=["users"], prefix="/api/users")
 
 # returns list of user
 @router.get("/", response_model=List[UserModel])
-async def users_list(request: Request, limit: int = 10):
-    return await read_users(limit = limit)
+async def users_list(limit: int = 10):
+    return await read_users(limit=limit)
 
 # returns user details for provided username
 @router.get("/{username}", response_model=UserModel)
