@@ -105,7 +105,7 @@ async def delete_file(file_id: str, username: str):
         return False
 
 # delete when file doc is given
-# no need to do aggregate call saves one databse io
+# no need to do aggregate call saves one database io
 async def delete_after_read_file(file: dict):
     result = await users.update_one({"files": file}, {"$pull": {"files": file}, "$inc": {"remaining_size": file["size"]}})
     if result.modified_count:
