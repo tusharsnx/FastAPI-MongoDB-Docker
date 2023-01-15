@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-mongodb-docker"
-version = "0.1.0"
+version = "0.2.0"
 description = "Fastapi based cloud storage platform YourDrive"
 authors = ["Tushar Singh <tusharvickey1999@gmail.com>"]
 readme = "README.md"
