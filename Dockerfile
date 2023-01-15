@@ -1,12 +1,9 @@
-FROM ubuntu
-
-RUN apt-get update -y
-RUN apt-get install -y python3.11 && apt-get install -y pip
+FROM python:3.11
 
 COPY /app /home/app
 
-RUN pip install -r ./home/app/requirements.txt
-
 WORKDIR /home/app
 
-ENTRYPOINT ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port $PORT"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENTRYPOINT [ "sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}" ]
