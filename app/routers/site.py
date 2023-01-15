@@ -3,10 +3,9 @@ from fastapi.requests import Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse, JSONResponse
 from models import UserRequestBody
-from .authorization import auth
+from routers.authorization import auth
 import utils
 import aiohttp
-import yaml
 import os
 
 # loading domain url
