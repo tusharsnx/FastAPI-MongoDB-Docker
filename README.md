@@ -1,22 +1,53 @@
-# FastAPI-MongoDB-Cloud-Storage
+# YourDrive (Cloud Storage)
 
-To run on local environment, first we need to set some enviornment variables related to configuration
--
-    export CLIENT_ID = your client id from the google auth server
-    export CLIENT_SECRET = your client secret from the google auth server
-    export DOMAIN = http://localhost:8000
-    export USERNAME = your mongodb login username
-    export PASS = your mongodb login pass
- 
- To run the uvicorn server
- -
-    uvicorn main:app
+#### Demo: [railway.app](https://fastapi-mongodb-docker-production.up.railway.app)
 
-To run on heroku environment, we need to save config variable in heroku setting page
--
-    CLIENT_ID: your client id from the google auth server
-    CLIENT_SECRET: your client secret from the google auth server
-    DOMAIN: your app domain url on heroku
-    USERNAME: your mongodb login username
-    PASS: your mongodb login pass
-and then deploy the app
+## Local Run
+
+To run it locally, first we need to set some environments.
+
+```sh
+export CLIENT_ID = <client-id from the Google Identity Platform> 
+export CLIENT_SECRET = <client-secret from the Google Identity Platform>
+export DOMAIN = http://localhost:8000
+export USERNAME = <mongodb username>
+export PASS = <mongodb password>
+```
+
+This project is using poetry for dependency management.
+
+Install the dependencies:
+
+```sh
+poetry install
+poetry shell
+```
+    
+Then run the uvicorn server:
+    
+```sh
+cd app
+uvicorn main:app
+```
+
+
+Then run the uvicorn server:
+
+```sh
+cd app
+uvicorn main:app
+```
+
+## Remote deployment
+
+Apply the enviroments in the project settings. 
+
+```sh
+CLIENT_ID = <client-id from the Google Identity Platform> 
+CLIENT_SECRET = <client-secret from the Google Identity Platform>
+DOMAIN: <domain(url) given by the Cloud provider> 
+USERNAME = <mongodb username>
+PASS: <mongodb pass>
+```
+
+Deploy the app.
