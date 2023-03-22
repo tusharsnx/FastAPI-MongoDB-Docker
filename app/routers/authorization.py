@@ -6,6 +6,7 @@ from uuid import uuid4
 import aiohttp
 import asyncio
 import os
+import pprint
 
 # loading config for authorization
 CLIENT_ID = os.environ["CLIENT_ID"]
@@ -139,4 +140,5 @@ async def create_new_user(name, username):
             if resp.status!=200:
                 # user does not exists
                 data = {"username": username, "name": name}
-                await session.post(f"{DOMAIN}/api/users", json=data)
+                resp = await session.post(f"{DOMAIN}/api/users", json=data)
+                pprint.pprint(resp.history)
