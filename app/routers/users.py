@@ -9,7 +9,7 @@ import utils
 router = APIRouter(tags=["users"], prefix="/api/users")
 
 # returns list of user
-@router.get("/", response_model=List[UserModel])
+@router.get("", response_model=List[UserModel])
 async def users_list(limit: int = 10):
     return await read_users(limit=limit)
 
@@ -31,7 +31,7 @@ async def get_files_list(username: str):
         return file_list
 
 # creates new user
-@router.post("/", response_model=OperationStatusModel)
+@router.post("", response_model=OperationStatusModel)
 async def add_user(user: UserRequestBody):
     response = await create_user(name=user.name, username=user.username)
     if not response:
