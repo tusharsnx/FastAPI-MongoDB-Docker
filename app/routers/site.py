@@ -37,7 +37,7 @@ async def get_current_user(request: Request):
         return None
 
 # route for home page
-@router.get("")
+@router.get("/")
 @router.get("/home", name="home")
 async def index(request: Request, user: UserRequestBody = Depends(get_current_user)):
     if user is None:
@@ -118,5 +118,3 @@ async def upload_file(file: UploadFile, username: str):
                 return 0
             else:
                 return -1
-    
-
