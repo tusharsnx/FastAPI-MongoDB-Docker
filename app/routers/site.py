@@ -118,5 +118,3 @@ async def upload_file(file: UploadFile, username: str):
                 return 0
             else:
                 return -1
-    
-
