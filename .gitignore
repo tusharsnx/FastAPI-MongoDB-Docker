@@ -5,5 +5,5 @@ __pycache__/
 uploaded/
 !uploaded/dummy.txt
 /config.yaml
-db.db
 *.env
+poetry.lock
